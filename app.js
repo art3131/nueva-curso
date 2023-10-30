@@ -1,11 +1,24 @@
-const http = require('node:http')
+import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
 
-let nombre ="lautaro"
+import { postsRouter } from "./routes/post-routes.js";
 
-const server = http.createServer((req, res)=>{
-    res.end({JSONstringify})
-})
+import { env } from "./settings/envs.js";
 
-server.listen(3000, ()=>{
-    console.log("server on port 3000")
-})
+const app = express();
+
+// middlewares
+app.use(express.json());
+app.use(morgan("dev"));
+app.use(cors());
+app.use(helmet());
+
+// app.use(validatePost);
+
+app.use("/posts", postsRouter);
+
+app.listen(env.PORT, () => {
+  console.log(`server on port ${env.PORT}`);
+});
